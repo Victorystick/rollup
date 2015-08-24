@@ -50,7 +50,8 @@ function bundle ( options, method ) {
 
 	return rollup.rollup({
 		entry: options.input,
-		external: options.external
+		external: options.external,
+		transform: ensureArray( options.transform ).map( requireTransform )
 	}).then( function ( bundle ) {
 		var generateOptions = {
 			dest: options.output,
@@ -80,4 +81,16 @@ function bundle ( options, method ) {
 
 		process.stdout.write( code );
 	});
+}
+
+function ensureArray ( val ) {
+	if ( Array.isArray( val ) ) return val;
+
+	if ( val != null) return [ val ];
+
+	return [];
+}
+
+function requireTransform ( name ) {
+	return require( name + '-transform' );
 }

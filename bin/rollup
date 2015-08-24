@@ -17,6 +17,7 @@ command = minimist( process.argv.slice( 2 ), {
 		m: 'sourcemap',
 		n: 'name',
 		o: 'output',
+		t: 'transform',
 		u: 'id',
 		v: 'version'
 	}
