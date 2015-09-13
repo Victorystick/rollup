@@ -382,7 +382,17 @@ export default class Statement {
 		// TODO: perhaps these could also be added?
 		keys( this.dependsOn ).forEach( name => {
 			if ( this.defines[ name ] ) return; // TODO maybe exclude from `this.dependsOn` in the first place?
-			this.module.locals.lookup( name ).mark();
+			const id = this.module.locals.lookup( name );
+
+			// When we take a reference of a not yet exported binding, we get a placeholder.
+			// If the binding is never defined, we only get the placeholder when doing this lookup.
+			// If we do, throw an error explaining the problem.
+			if ( typeof id === 'string' ) {
+				throw new Error( `Undefined binding "${name}" (exported as ${id}) was imported by "${this.module.id}".` );
+			}
+
+			// Otherwise, mark it!
+			id.mark();
 		});
 	}
 
