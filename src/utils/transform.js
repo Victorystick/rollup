@@ -10,6 +10,12 @@ export default function transform ( source, id, transformers ) {
 		};
 	}
 
+	// If the source already has a source map defined,
+	// add it to the chain of source-maps to collapse.
+	if ( source.map ) {
+		sourceMapChain.push( source.map );
+	}
+
 	let originalCode = source.code;
 	let ast = source.ast;
 
